@@ -8,6 +8,18 @@ app.secret_key = '12345678'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///chat_app.db'
 db = SQLAlchemy(app)
 socketio = SocketIO(app)
+from flask import abort
+
+def is_admin():
+    return session.get('username') == 'raydonggs'
+@app.route('/admin')
+def admin_panel():
+    if not is_admin():
+        abort(403)
+
+    users = User.query.all()
+    messages = Message.query.order_by(Message.id.desc()).limit(50).all()
+    return render_template('admin.html', users=users, messages=messages)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
