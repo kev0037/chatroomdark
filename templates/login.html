@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>登录 - RayChat</title>
+    <title>Login - RayChat</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
     <div class="container">
-        <button class="back-button" onclick="window.location.href='/'">返回主界面</button>
-        <h2>登录</h2>
+        <button class="back-button" onclick="window.location.href='/'">Back to Home</button>
+        <h2>Login</h2>
         <form id="loginForm">
-            <label for="loginUsername">用户名</label>
+            <label for="loginUsername">Username</label>
             <input type="text" id="loginUsername" name="username" required autofocus />
-            <label for="loginPassword">密码</label>
+            <label for="loginPassword">Password</label>
             <input type="password" id="loginPassword" name="password" required />
-            <button type="submit">登录</button>
+            <button type="submit">Login</button>
         </form>
     </div>
 
