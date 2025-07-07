@@ -82,5 +82,9 @@ def handle_disconnect():
     if 'username' in session:
         emit('status', {'msg': f"{session['username']} has left the chat"}, broadcast=True)
 
+import os
+
 if __name__ == '__main__':
-    socketio.run(app, host="0.0.0.0", port=80, debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    socketio.run(app, host='0.0.0.0', port=port)
+
