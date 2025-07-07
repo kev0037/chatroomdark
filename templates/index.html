@@ -139,7 +139,7 @@
     <div id="chatWindow">
       {% for message in messages %}
         <div>
-          <strong>[{{ message.username }}]</strong>
+          <strong>{{ message.username }}</strong>
           <span class="chat-message">{{ message.message }}</span>
         </div>
       {% endfor %}
