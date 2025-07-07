@@ -137,12 +137,17 @@
     <h2>RayChat</h2>
 
     <div id="chatWindow">
-      {% for message in messages %}
-        <div>
-          <strong>{{ message.username }}</strong>
-          <span class="chat-message">{{ message.message }}</span>
-        </div>
-      {% endfor %}
+{% for message in messages %}
+  <div>
+    {% if message.username == 'raydonggs' %}
+      <strong class="owner-username">{{ message.username }} <small class="owner-label">(Owner)</small></strong>
+    {% else %}
+      <strong>{{ message.username }}</strong>
+    {% endif %}
+    <span class="chat-message">{{ message.message }}</span>
+  </div>
+{% endfor %}
+
     </div>
     {% if username == 'raydonggs' %}
   <button id="clearChatBtn" onclick="clearChat()">Clear Chat</button>
