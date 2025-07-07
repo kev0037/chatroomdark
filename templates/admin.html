@@ -12,7 +12,7 @@
 </head>
 <body>
     <div class="admin-section">
-        <h2>👑 Admin Panel</h2>
+        <h2> Admin Panel</h2>
         <p>Welcome, {{ session.username }}</p>
         <a href="/">← Back to Chat</a>
 
@@ -34,37 +34,5 @@
                 </tr>
             {% endfor %}
         </table>
-
-        <form method="post" action="/admin/clear">
-            <button type="submit" style="margin-top: 15px;">🧹 Clear All Chat Messages</button>
-        </form>
-    </div>
 </body>
-<h3>🟢 Active Sessions</h3>
-<table class="admin-table" id="activeSessionsTable">
-    <tr><th>Username</th><th>Connected For</th></tr>
-</table>
-
-<script>
-async function loadActiveSessions() {
-    const res = await fetch('/admin/active_sessions');
-    const data = await res.json();
-    const table = document.getElementById('activeSessionsTable');
-    
-    // Clear old rows except header
-    while(table.rows.length > 1) {
-        table.deleteRow(1);
-    }
-
-    data.users.forEach(user => {
-        const row = table.insertRow();
-        row.insertCell(0).innerText = user.username;
-        row.insertCell(1).innerText = user.connected_for;
-    });
-}
-
-// Refresh every 10 seconds
-loadActiveSessions();
-setInterval(loadActiveSessions, 10000);
-</script>
 </html>
