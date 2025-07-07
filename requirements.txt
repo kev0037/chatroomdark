@@ -3,7 +3,6 @@ Flask-SocketIO==5.3.3
 Flask-SQLAlchemy==3.0.3
 eventlet==0.33.3
 Werkzeug==2.3.6
-python_version==3.11.*
 eventlet>=0.33.3
 gunicorn
 flask-socketio
