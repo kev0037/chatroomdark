@@ -1,42 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{{ username if logged_in else "Welcome" }} - RayChat</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ username if logged_in else "Welcome" }} - RayChat</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <style>
+    body {
+      background: #121212;
+      color: #ddd;
+      font-family: monospace, monospace;
+      margin: 0;
+      padding: 10px;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .header-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    button {
+      background: #222;
+      color: #ddd;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-family: monospace, monospace;
+    }
+
+    button:hover {
+      background: #55ff55;
+      color: #121212;
+    }
+
+    h2 {
+      margin-bottom: 15px;
+      color: #55ff55;
+    }
+
+    #chatWindow {
+      background: #1e1e1e;
+      padding: 10px;
+      height: 400px;
+      overflow-y: auto;
+      border: 1px solid #222;
+      font-size: 14px;
+      line-height: 1.2;
+      font-family: monospace, monospace;
+    }
+
+    #chatWindow > div {
+      margin-bottom: 3px;
+      padding: 2px 0;
+      border-bottom: 1px solid #222;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    #chatWindow > div:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+
+    #chatWindow strong {
+      color: #55ff55;
+      flex-shrink: 0;
+    }
+
+    .chat-message {
+      color: #ddd;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex-grow: 1;
+    }
+
+    #chatForm {
+      margin-top: 10px;
+      display: flex;
+      gap: 5px;
+    }
+
+    #message {
+      flex-grow: 1;
+      font-family: monospace, monospace;
+      padding: 8px;
+      background: #222;
+      border: 1px solid #444;
+      color: #ddd;
+      resize: vertical;
+      min-height: 40px;
+      max-height: 120px;
+    }
+
+    #message::placeholder {
+      color: #777;
+    }
+
+    #chatForm button {
+      background: #55ff55;
+      color: #121212;
+      border: none;
+      padding: 0 20px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    #chatForm button:hover {
+      background: #33cc33;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header-buttons">
-            {% if logged_in %}
-                <span><strong>{{ username }}</strong></span>
-                <button onclick="window.location.href='/logout'">Logout</button>
-            {% else %}
-                <button onclick="window.location.href='/register'">Register</button>
-                <button onclick="window.location.href='/login'">Login</button>
-            {% endif %}
-        </div>
-        <h2>RayChat</h2>
-
-        <div id="chatWindow">
-            {% for message in messages %}
-                <div>
-                    <div><strong>[{{ message.username }}]</strong></div>
-                    <div class="chat-message">{{ message.message }}</div>
-                </div>
-            {% endfor %}
-        </div>
-
-        {% if logged_in %}
-            <form id="chatForm">
-                <textarea id="message" placeholder="Enter message" required></textarea>
-                <button type="submit">Send</button>
-            </form>
-        {% endif %}
+  <div class="container">
+    <div class="header-buttons">
+      {% if logged_in %}
+        <span><strong>{{ username }}</strong></span>
+        <button onclick="window.location.href='/logout'">Logout</button>
+      {% else %}
+        <button onclick="window.location.href='/register'">Register</button>
+        <button onclick="window.location.href='/login'">Login</button>
+      {% endif %}
     </div>
 
-    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
-    <script src="{{ url_for('static', filename='main.js') }}"></script>
+    <h2>RayChat</h2>
+
+    <div id="chatWindow">
+      {% for message in messages %}
+        <div>
+          <strong>[{{ message.username }}]</strong>
+          <span class="chat-message">{{ message.message }}</span>
+        </div>
+      {% endfor %}
+    </div>
+
+    {% if logged_in %}
+      <form id="chatForm">
+        <textarea id="message" placeholder="Enter message" required></textarea>
+        <button type="submit">Send</button>
+      </form>
+    {% endif %}
+  </div>
+
+  <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+  <script src="{{ url_for('static', filename='main.js') }}"></script>
 </body>
 </html>
