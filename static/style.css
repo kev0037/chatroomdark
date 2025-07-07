@@ -160,3 +160,13 @@ strong {
   max-height: 120px;      /* max height before scrollbar */
   line-height: 1.3em;
 }
+.owner-username {
+    color: red;
+    font-weight: bold;
+}
+
+.owner-label {
+    font-size: 0.8em;
+    color: red;
+    margin-left: 4px;
+}
