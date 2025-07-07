@@ -153,3 +153,10 @@ strong {
         line-height: 1.4;
     }
 }
+#message {
+  resize: vertical;       /* allow vertical resize only */
+  overflow-y: hidden;     /* hide scrollbar until needed */
+  min-height: 40px;       /* fixed starting height */
+  max-height: 120px;      /* max height before scrollbar */
+  line-height: 1.3em;
+}
