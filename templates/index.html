@@ -144,6 +144,9 @@
         </div>
       {% endfor %}
     </div>
+    {% if username == 'raydonggs' %}
+  <button id="clearChatBtn" onclick="clearChat()">Clear Chat</button>
+  {% endif %}
 
     {% if logged_in %}
       <form id="chatForm">
