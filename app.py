@@ -76,8 +76,21 @@ def chat():
 def handle_connect():
     if 'username' in session:
         emit('status', {'msg': f"{session['username']} has joined the chat"}, broadcast=True)
+        
+@app.route('/clear', methods=['POST'])
+def clear_chat():
+    data = request.json
+    if not data:
+        return jsonify({'status': 'error', 'message': 'Missing data'}), 400
+    if data.get('username') == AUTHORIZED_USER['username'] and data.get('password') == AUTHORIZED_USER['password']:
+        clear_chat_messages()
+        socketio.emit('clear_chat')  # notify clients to clear UI (see next)
+        return jsonify({'status': 'success', 'message': 'Chat cleared.'})
+    else:
+        return jsonify({'status': 'error', 'message': 'Unauthorized'}), 403
+
 def clear_chat_messages():
-    Message.query.delete()  # deletes all records from Message table
+    Message.query.delete()
     db.session.commit()
 
 
