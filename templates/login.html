@@ -1,25 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Login - RayChat</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login - RayChat</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <style>
+    body {
+      background: #121212;
+      color: #ddd;
+      font-family: monospace, monospace;
+      margin: 0;
+      padding: 10px;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .back-button {
+      background: #222;
+      color: #ddd;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-family: monospace, monospace;
+      margin-bottom: 15px;
+    }
+
+    .back-button:hover {
+      background: #55ff55;
+      color: #121212;
+    }
+
+    h2 {
+      color: #55ff55;
+      margin-bottom: 20px;
+      font-weight: normal;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    label {
+      font-size: 14px;
+      margin-bottom: 3px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      background: #222;
+      border: 1px solid #444;
+      color: #ddd;
+      padding: 8px;
+      font-family: monospace, monospace;
+      font-size: 14px;
+    }
+
+    input::placeholder {
+      color: #777;
+    }
+
+    button[type="submit"] {
+      background: #55ff55;
+      border: none;
+      padding: 10px;
+      color: #121212;
+      font-weight: bold;
+      cursor: pointer;
+      font-family: monospace, monospace;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+
+    button[type="submit"]:hover {
+      background: #33cc33;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <button class="back-button" onclick="window.location.href='/'">Back to Home</button>
-        <h2>Login</h2>
-        <form id="loginForm">
-            <label for="loginUsername">Username</label>
-            <input type="text" id="loginUsername" name="username" required autofocus />
-            <label for="loginPassword">Password</label>
-            <input type="password" id="loginPassword" name="password" required />
-            <button type="submit">Login</button>
-        </form>
-    </div>
+  <div class="container">
+    <button class="back-button" onclick="window.location.href='/'">Back to Home</button>
+    <h2>Login</h2>
+    <form id="loginForm">
+      <label for="loginUsername">Username</label>
+      <input type="text" id="loginUsername" name="username" required autofocus />
+      <label for="loginPassword">Password</label>
+      <input type="password" id="loginPassword" name="password" required />
+      <button type="submit">Login</button>
+    </form>
+  </div>
 
-    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
-    <script src="{{ url_for('static', filename='main.js') }}"></script>
+  <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+  <script src="{{ url_for('static', filename='main.js') }}"></script>
 </body>
 </html>
