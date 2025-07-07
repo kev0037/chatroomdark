@@ -111,3 +111,11 @@ document.addEventListener('DOMContentLoaded', function() {
         chatWindow.scrollTop = chatWindow.scrollHeight;
     });
 });
+const messageInput = document.getElementById('message');
+
+messageInput.style.height = '40px'; // initial height
+
+messageInput.addEventListener('input', () => {
+  messageInput.style.height = '40px'; // reset height to min
+  messageInput.style.height = messageInput.scrollHeight + 'px'; // expand height based on content
+});
