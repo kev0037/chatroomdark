@@ -119,6 +119,14 @@ messageInput.addEventListener('input', () => {
   messageInput.style.height = '40px'; // reset height to min
   messageInput.style.height = messageInput.scrollHeight + 'px'; // expand height based on content
 });
+const socket = io();
+
+socket.on('clear_chat', () => {
+  const chatWindow = document.getElementById('chatWindow');
+  if (chatWindow) {
+    chatWindow.innerHTML = '';
+  }
+});
 function clearChat() {
   fetch('/clear', {
     method: 'POST',
@@ -135,11 +143,4 @@ function clearChat() {
   })
   .catch(console.error);
 }
-const socket = io();
 
-socket.on('clear_chat', () => {
-  const chatWindow = document.getElementById('chatWindow');
-  if (chatWindow) {
-    chatWindow.innerHTML = '';
-  }
-});
