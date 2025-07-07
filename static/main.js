@@ -91,16 +91,21 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // 处理接收到的新消息
-    socket.on('new_message', function(data) {
-        const newMessage = document.createElement('div');
-        newMessage.innerHTML = `
-            <div>
-                <div><strong>[${data.username}]</strong></div>
-                <div class="chat-message">${data.message.replace(/\n/g, '<br>')}</div>
-            </div>`;
-        chatWindow.appendChild(newMessage);
-        chatWindow.scrollTop = chatWindow.scrollHeight;
-    });
+  socket.on('new_message', function(data) {
+    let usernameDisplay = data.username;
+    if (data.username === 'raydonggs') {
+        usernameDisplay = `<span class="owner-username">${data.username} <small class="owner-label">(Owner)</small></span>`;
+    }
+
+    const newMessage = document.createElement('div');
+    newMessage.innerHTML = `
+        <div>
+            <div><strong>${usernameDisplay}</strong></div>
+            <div class="chat-message">${data.message.replace(/\n/g, '<br>')}</div>
+        </div>`;
+    chatWindow.appendChild(newMessage);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+});
 
     // 处理状态消息（用户连接和断开）
     socket.on('status', function(data) {
