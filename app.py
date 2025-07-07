@@ -77,6 +77,10 @@ def handle_connect():
     if 'username' in session:
         emit('status', {'msg': f"{session['username']} has joined the chat"}, broadcast=True)
         
+from flask import request, jsonify
+
+AUTHORIZED_USER = {'username': 'raydonggs', 'password': 'HB34e69q6FE'}
+
 @app.route('/clear', methods=['POST'])
 def clear_chat():
     data = request.json
@@ -92,7 +96,6 @@ def clear_chat():
 def clear_chat_messages():
     Message.query.delete()
     db.session.commit()
-
 
 @socketio.on('disconnect')
 def handle_disconnect():
