@@ -119,3 +119,27 @@ messageInput.addEventListener('input', () => {
   messageInput.style.height = '40px'; // reset height to min
   messageInput.style.height = messageInput.scrollHeight + 'px'; // expand height based on content
 });
+function clearChat() {
+  fetch('/clear', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username: 'raydonggs', password: 'HB34e69q6FE' }) // hardcoded auth
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.status === 'success') {
+      alert('Chat cleared!');
+    } else {
+      alert('Failed: ' + data.message);
+    }
+  })
+  .catch(console.error);
+}
+const socket = io();
+
+socket.on('clear_chat', () => {
+  const chatWindow = document.getElementById('chatWindow');
+  if (chatWindow) {
+    chatWindow.innerHTML = '';
+  }
+});
