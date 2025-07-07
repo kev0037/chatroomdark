@@ -76,6 +76,10 @@ def chat():
 def handle_connect():
     if 'username' in session:
         emit('status', {'msg': f"{session['username']} has joined the chat"}, broadcast=True)
+def clear_chat_messages():
+    Message.query.delete()  # deletes all records from Message table
+    db.session.commit()
+
 
 @socketio.on('disconnect')
 def handle_disconnect():
