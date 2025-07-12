@@ -107,6 +107,30 @@ document.addEventListener('DOMContentLoaded', function() {
     chatWindow.scrollTop = chatWindow.scrollHeight;
 });
 
+socket.on('chat_message', function(data) {
+    const messageDiv = document.createElement('div');
+    messageDiv.classList.add('message');
+    messageDiv.setAttribute('data-message-id', data.id);  // Needed for tracking
+    messageDiv.innerHTML = `<strong>${data.username}:</strong> ${data.message}`;
+
+    // 👉 Right-click to delete for everyone (admins only)
+    messageDiv.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        if (confirm("Delete this message for EVERYONE?")) {
+            fetch(`/delete_message_global/${data.id}`, {
+                method: 'POST'
+            }).then(res => {
+                if (!res.ok) {
+                    alert("You aren't allowed to delete this message.");
+                }
+            });
+        }
+    });
+
+    document.getElementById('chatbox').appendChild(messageDiv);
+});
+
+    
     // 处理状态消息（用户连接和断开）
     socket.on('status', function(data) {
         const statusMessage = document.createElement('div');
@@ -149,3 +173,9 @@ function clearChat() {
   .catch(console.error);
 }
 
+socket.on('delete_message', function(data) {
+    const msgElement = document.querySelector(`[data-message-id="${data.message_id}"]`);
+    if (msgElement) {
+        msgElement.remove();
+    }
+});
