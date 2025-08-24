@@ -1,17 +1,23 @@
-from flask import Flask, request, jsonify, render_template, redirect, url_for, session
+from flask import Flask, request, jsonify, render_template, redirect, url_for, session, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_socketio import SocketIO, emit
 from werkzeug.security import generate_password_hash, check_password_hash
+import os
 
 app = Flask(__name__)
 app.secret_key = '12345678'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///chat_app.db'
 db = SQLAlchemy(app)
 socketio = SocketIO(app)
-from flask import abort
 
+AUTHORIZED_USER = {'username': 'raydonggs', 'password': 'HB34e69q6FE'}
+
+# -----------------------------
+# Admin check
+# -----------------------------
 def is_admin():
     return session.get('username') == 'raydonggs'
+
 @app.route('/admin')
 def admin_panel():
     if not is_admin():
@@ -21,6 +27,9 @@ def admin_panel():
     messages = Message.query.order_by(Message.id.desc()).limit(50).all()
     return render_template('admin.html', users=users, messages=messages)
 
+# -----------------------------
+# Database models
+# -----------------------------
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
@@ -34,6 +43,9 @@ class Message(db.Model):
 with app.app_context():
     db.create_all()
 
+# -----------------------------
+# Routes
+# -----------------------------
 @app.route('/')
 def home():
     messages = Message.query.all()
@@ -84,39 +96,44 @@ def chat():
     socketio.emit('new_message', {'username': session['username'], 'message': data['message']})
     return jsonify({'success': True, 'username': session['username'], 'message': data['message']})
 
+# -----------------------------
+# Clear everything (users + messages)
+# -----------------------------
+@app.route('/clear', methods=['POST'])
+def clear_database():
+    data = request.json
+    if not data:
+        return jsonify({'status': 'error', 'message': 'Missing data'}), 400
+
+    if data.get('username') == AUTHORIZED_USER['username'] and data.get('password') == AUTHORIZED_USER['password']:
+        # Delete all messages and users
+        Message.query.delete()
+        User.query.delete()
+        db.session.commit()
+
+        # Notify clients to clear chat UI
+        socketio.emit('clear_chat')
+
+        return jsonify({'status': 'success', 'message': 'Database completely reset.'})
+    else:
+        return jsonify({'status': 'error', 'message': 'Unauthorized'}), 403
+
+# -----------------------------
+# SocketIO events
+# -----------------------------
 @socketio.on('connect')
 def handle_connect():
     if 'username' in session:
         emit('status', {'msg': f"{session['username']} has joined the chat"}, broadcast=True)
-        
-from flask import request, jsonify
-
-AUTHORIZED_USER = {'username': 'raydonggs', 'password': 'HB34e69q6FE'}
-
-@app.route('/clear', methods=['POST'])
-def clear_chat():
-    data = request.json
-    if not data:
-        return jsonify({'status': 'error', 'message': 'Missing data'}), 400
-    if data.get('username') == AUTHORIZED_USER['username'] and data.get('password') == AUTHORIZED_USER['password']:
-        clear_chat_messages()
-        socketio.emit('clear_chat')  # notify clients to clear UI (see next)
-        return jsonify({'status': 'success', 'message': 'Chat cleared.'})
-    else:
-        return jsonify({'status': 'error', 'message': 'Unauthorized'}), 403
-
-def clear_chat_messages():
-    Message.query.delete()
-    db.session.commit()
 
 @socketio.on('disconnect')
 def handle_disconnect():
     if 'username' in session:
         emit('status', {'msg': f"{session['username']} has left the chat"}, broadcast=True)
 
-import os
-
+# -----------------------------
+# Run server
+# -----------------------------
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     socketio.run(app, host='0.0.0.0', port=port)
-
