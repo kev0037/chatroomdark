@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>{{ username if logged_in else "Welcome" }} - rxy chatroom</title>
+  <title>{{ username if logged_in else "Welcome" }} </title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
   <style>
     body {
@@ -134,7 +134,7 @@
       {% endif %}
     </div>
 
-    <h2>rxy chatroom</h2>
+    <h2>chat.doxcry.fun</h2>
 
     <div id="chatWindow">
 {% for message in messages %}
@@ -165,5 +165,6 @@
   <script src="{{ url_for('static', filename='main.js') }}"></script>
 </body>
 </html>
+
 
 
